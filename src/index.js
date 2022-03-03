@@ -27,4 +27,4 @@ app.use(bp.json());
 app.use(cors(corsOptions))
 
 // RUN
-app.listen(process.env.PORT || 5000, () => console.log('Service is running!', port));
+app.listen(process.env.PORT || 5000, () => console.log('Service is running!'));
