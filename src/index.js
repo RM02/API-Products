@@ -26,8 +26,5 @@ app.use(routes);
 app.use(bp.json());
 app.use(cors(corsOptions))
 
-const port = process.env.PORT || 3000;
-const host = process.env.HOST || '0.0.0.0';
-
 // RUN
-app.listen(port, host, () => console.log('Service is running!'));
+app.listen(process.env.PORT || 5000 () => console.log('Service is running!', port));
