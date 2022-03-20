@@ -7,6 +7,7 @@ var ArticleSchema = new Schema({
     description : String,
     category : String,
     price : Number,
+    filename: String,
     created_at: { type: Date, default: Date.now }
 });
 

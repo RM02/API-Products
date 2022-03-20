@@ -3,10 +3,10 @@ const express = require("express");
 const app = express();
 const bp = require('body-parser');
 var cors = require('cors')
+const path = require('path');
 
-require('dotenv').config({
-  path: './variables.env'
-})
+const CONFIG = require('./config/index');
+require('./config/db');
 
 var corsOptions = {
   origin: 'http://localhost:8080',
@@ -14,17 +14,16 @@ var corsOptions = {
 }
 
 // Routes 
-const routes = require("./routes/index.js")
-
-// Config
-require("./config/db");
+const routes = require("./routes/index.js");
 
 app.use(bp.json());
 app.use(bp.urlencoded({ extended: true }));
 
 app.use(routes);
 app.use(bp.json());
-app.use(cors(corsOptions))
+app.use(cors(corsOptions));
+
+app.use('/src/uploads', express.static('uploads'))
 
 // RUN
-app.listen(process.env.PORT || 5000, () => console.log('Service is running!'));
+app.listen(CONFIG.server.port|| 5000, () => console.log(`Running in port: ${CONFIG.server.port}`));

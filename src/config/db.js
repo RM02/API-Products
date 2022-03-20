@@ -1,3 +1,4 @@
+const config = require('./index');
 const mongoose = require('mongoose');
 
 var conn = mongoose
@@ -5,7 +6,7 @@ var conn = mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
-  .then(() => console.log("Database connected!"))
+  .then(() => console.log("Successfully connected to database."))
   .catch(err => console.log(err));
 
-  module.exports = conn;
+module.exports = conn;

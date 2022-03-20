@@ -5,10 +5,10 @@ exports.login = async function (req, res) {
 
     User.findOne({email: email, password: password}, function(req, user) {
         if (user) {
-            res.json({status: 200, result: user})
+            res.status(200).json({status: 200, result: user})
         }
         if (!user) {
-            res.json({status: 201, result: "User not found!"})
+            res.status(400).json({status: 400, result: "User not found!"})
         }
 
     })
@@ -32,11 +32,50 @@ exports.delete_user = async function(req, res) {
 }
 
 
+exports.edit_user = function(req, res) {
+
+    User.findByIdAndUpdate(req.params.id, { $set: { name: req.body.name } },
+    function(err, user) {
+        if (err) {
+            res.json({status: 500})
+        } 
+        res.json({status: 200, result: user})
+    })
+}
+
 exports.register = async function(req, res) {
 
-    const { name, last_name, email, password, phone } = req.body;
+    const { 
+        name,
+        last_name,
+        dayOfBirth,
+        phone,
+        email,
+        address,
+        blood_type,
+        weight,
+        height,
+        insurance_company,
+        policy_number,
+        insurance_expiry_date,
+        password
+    } = req.body;
 
-    const user = new User({name, last_name, email, password, phone})
+    const user = await new User({
+        name,
+        last_name,
+        dayOfBirth,
+        phone,
+        email,
+        address,
+        blood_type,
+        weight,
+        height,
+        insurance_company,
+        policy_number,
+        insurance_expiry_date,
+        password
+    })
     await user.save(function(err, data) {
         if (err) {
             res.json({status: 500, result: err})

@@ -26,7 +26,11 @@ exports.create = async function(req, res) {
 
     const { name, description, price, category } = req.body
 
-    var article = new Article({name, description, price, category})
+    var article = await new Article({name, description, price, category})
+
+    if (req.file) {
+        article.filename = req.file.filename
+    }
     
     await article.save()
     
