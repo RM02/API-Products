@@ -3,19 +3,18 @@ var router = express()
 
 // controllers
 
-var article_controller = require('../controllers/article');
+var agenda_controller = require('../controllers/agenda');
 var login_controller = require('../controllers/login');
 var order_controller = require('../controllers/order');
-
 var upload_controller = require('../controllers/upload');
-const upload = require('../middleware/upload').upload;
+var upload = require('../middleware/upload').upload;
 
 
-// Articles routes
-router.get('/articles', article_controller.get_list)
-router.delete('/articles/:id', article_controller.delete)
-// router.put('/articles/<id>', article_controller.get_list)
-router.post('/article/publish', upload.single('file'), article_controller.create)
+// Agenda routes
+router.get('/agenda', agenda_controller.get_list)
+router.delete('/agenda/:id', agenda_controller.delete)
+// router.put('/articles/<id>', agenda_controller.get_list)
+router.post('/agenda/publish', agenda_controller.create)
 
 // Order
 router.get('/orders', order_controller.get)

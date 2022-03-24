@@ -16,6 +16,7 @@ var User = new Schema({
     policy_number: String,
     insurance_expiry_date: String,
     password: String,
+    rol: String,
     created_at: { type: Date, default: Date.now }
 })
 

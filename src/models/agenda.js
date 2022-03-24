@@ -2,16 +2,16 @@ var mongoose = require('mongoose');
         
 var Schema = mongoose.Schema;
 
-var ArticleSchema = new Schema({
-    name : String,
+var AgendaSchema = new Schema({
+    subject : String,
+    patient : String,
+    deparment: String,
     description : String,
-    category : String,
-    price : Number,
-    filename: String,
+    created_by: String,
     created_at: { type: Date, default: Date.now }
 });
 
 
 // by default the collection created in the db would be the first parameter we use (or the plural of it)    
-module.exports = mongoose.model('Article', ArticleSchema); 
+module.exports = mongoose.model('Agenda', AgendaSchema); 
 

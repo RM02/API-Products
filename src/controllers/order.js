@@ -1,5 +1,5 @@
 var Order = require("../models/orders");
-var Article = require("../models/articles");
+var Agenda = require("../models/agenda");
 
 exports.get = async function(req, res) {
     Order.find({}, function(err, data) {
@@ -19,7 +19,7 @@ exports.create = async function(req, res) {
     await order.save()
 
     req.body.products.forEach(async function (item) {
-        const product = await Article.findById(item)
+        const product = await Agenda.findById(item)
         order.products.push(product)
         order.save()
     });
