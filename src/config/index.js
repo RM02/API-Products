@@ -11,7 +11,8 @@ const DEV = {
     },
     db: {
         mongo_uri: process.env.MONGO_DEV_URI
-    }
+    },
+    token_key: process.env.TOKEN_KEY
 }
 
 const TEST = {
@@ -20,7 +21,8 @@ const TEST = {
     },
     db: {
         mongo_uri: process.env.MONGO_DEV_URI
-    }
+    },
+    token_key: process.env.TOKEN_KEY
 }
 
 const config = {

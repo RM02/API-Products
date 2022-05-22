@@ -1,17 +1,36 @@
 var User = require("../models/users");
+const jwt = require("jsonwebtoken");
+const bcrypt = require('bcryptjs');
 
 exports.login = async function (req, res) {
-    const { email, password } = req.body;
 
-    User.findOne({email: email, password: password}, function(req, user) {
-        if (user) {
-            res.status(200).json({status: 200, result: user})
-        }
-        if (!user) {
-            res.status(400).json({status: 400, result: "User not found!"})
-        }
+    const EXPIRE_TOKEN = "2h"
 
-    })
+    const { email, password } = req.body;        
+
+    if (!(email && password)) {
+        res.status(400).json({
+            msg: 'Invalid data'
+        });
+    }
+    const user = await User.findOne({ email });
+    
+    if (user && (await bcrypt.compare(password, user.password))) {
+
+        const token = jwt.sign({ user }, process.env.TOKEN_KEY, { expiresIn: EXPIRE_TOKEN });
+        
+        user.token = token;
+
+        res.status(200).json({
+            "expires_in": EXPIRE_TOKEN,
+            "access_token": user.token
+        });
+    } else {
+        res.status(401).json({
+            "status": 401,
+            "msg": "Invalid credential"
+        });
+    }
 
 }
 
@@ -45,41 +64,36 @@ exports.edit_user = function(req, res) {
 
 exports.register = async function(req, res) {
 
-    const { 
-        name,
-        last_name,
-        dayOfBirth,
-        phone,
-        email,
-        address,
-        blood_type,
-        weight,
-        height,
-        insurance_company,
-        policy_number,
-        insurance_expiry_date,
-        password
-    } = req.body;
+    const { email, password } = req.body;
 
-    const user = await new User({
-        name,
-        last_name,
-        dayOfBirth,
-        phone,
-        email,
-        address,
-        blood_type,
-        weight,
-        height,
-        insurance_company,
-        policy_number,
-        insurance_expiry_date,
-        password
-    })
-    await user.save(function(err, data) {
-        if (err) {
-            res.json({status: 500, result: err})
+    if (!(email && password)) {
+        res.status(400).json({msg: "Los datos son requeridos"});
+    }
+    const oldUser = await User.findOne({ email });
+
+    if (oldUser) {
+        return res.status(409).json({msg: "El usuario ya exite!"});
+    }
+    
+    encryptedPassword = await bcrypt.hash(password, 10);
+    // Create user in our database
+    const user = await User.create({
+        email: email.toLowerCase(),
+        password: encryptedPassword,
+    });
+
+    const token = jwt.sign(
+        { user },
+            process.env.TOKEN_KEY,
+        {
+            expiresIn: "2h",
         }
-        res.json({result: data})
-    })
+    );
+    // save user token
+    user.token = token;
+    res.status(201).json({
+        status: 200,
+        data: user
+    });
+
 }
